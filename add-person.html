@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Person</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #0f2027, #203a43);
+    color: white;
+    padding-top: 20px;
+    padding-bottom: 120px;
+}
+h2 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+form {
+    background-color: #001f4d;
+    width: 80%;
+    max-width: 400px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    text-align: left;
+}
+input {
+    width: 90%;
+    font-size: 1.5em;
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 10px;
+    border: none;
+}
+button {
+    width: 100%;
+    font-size: 1.8em;
+    padding: 15px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+a.back {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    font-size: 1.8em;
+    background-color: #ffeb3b;
+    color: #000;
+    border-radius: 20px;
+    padding: 18px 0;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<h2>➕ Add Person</h2>
+
+<form action="/save-person" method="post">
+    <input type="text" name="name" placeholder="First Name" required>
+    <input type="text" name="surname" placeholder="Surname" required>
+
+    <!-- ✅ Birthday -->
+    <input type="date" name="birthday" required>
+
+    <input type="email" name="email" placeholder="Email" required>
+
+    <button type="submit">💾 Save</button>
+</form>
+
+<a href="/family" class="back">⬅ Back</a>
+
+</body>
+</html>

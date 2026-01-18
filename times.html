@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choose Country</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradienitt(135deg, #0f2027, #203a43); /* dark blue background */
+    color: white;
+    padding-top: 20px;
+    padding-bottom: 100px;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 40px;
+}
+
+/* Dark blue buttons */
+a.button {
+    display: block;
+    width: 80%;
+    max-width: 400px;
+    margin: 20px auto;
+    background-color: #001f4d; /* dark blue */
+    color: #ffffff;
+    font-size: 2em;
+    padding: 20px 0;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+a.button:hover {
+    transform: scale(1.05);
+    background-color: #003366; /* slightly lighter blue on hover */
+}
+
+/* Fixed yellow-black Back button */
+a.back {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    font-size: 1.8em;
+    background-color: #ffeb3b; /* yellow */
+    color: #000000; /* black text */
+    border-radius: 20px;
+    padding: 18px 0;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+a.back:hover {
+    background-color: #ffd600; /* darker yellow on hover */
+}
+
+</style>
+</head>
+
+<body>
+<h1>🌍 Choose a Country</h1>
+
+<a href="/time/Europe/Madrid" class="button">🇪🇸 Spain</a>
+<a href="/time/Europe/Kyiv" class="button">🇺🇦 Ukraine</a>
+<a href="/time/America/Argentina/Buenos_Aires" class="button">🇦🇷 Argentina</a>
+<a href="/time/Europe/Paris" class="button">🇫🇷 France</a>
+<a href="/time/Europe/Berlin" class="button">🇩🇪 Germany</a>
+<a href="/time/Europe/London" class="button">🇬🇧 UK</a>
+<a href="/time/America/New_York" class="button">🇺🇸 USA</a>
+
+<a href="/" class="back">⬅ Back                             </a>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Members</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #0f2027, #203a43);
+    color: white;
+    padding-top: 20px;
+    padding-bottom: 120px;
+}
+h2 {
+    font-size: 2.3em;
+    margin-bottom: 40px;
+}
+a.button {
+    display: block;
+    width: 80%;
+    max-width: 400px;
+    margin: 15px auto;
+    background-color: #1272C4;
+    color: #ffffff;
+    font-size: 1.5em;
+    padding: 18px 0;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+a.button:hover {
+    transform: scale(1.05);
+}
+a.button-add {
+    display: block;
+    width: 80%;
+    max-width: 400px;
+    margin: 15px auto;
+    background-color: #003366;
+    color: #ffffff;
+    font-size: 2em;
+    padding: 18px 0;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+a.back {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    font-size: 1.8em;
+    background-color: #ffeb3b;
+    color: #000000;
+    border-radius: 20px;
+    padding: 18px 0;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+<body>
+<h2>👨‍👩‍👧 Family Members</h2>
+{people}
+<a href="/add-person" class="button-add">➕ Add Person</a>
+<a href="/" class="back">⬅ Back          </a>
+</body>
+</html>

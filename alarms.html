@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alarms</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #141e30, #243b55);
+    color: #f1f1f1;
+    padding: 20px 0 100px 0;
+    margin: 0;
+}
+
+/* Page Title */
+h1 {
+    font-size: 3em;
+    margin-bottom: 30px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* Alarm Card */
+.alarm {
+    background: linear-gradient(135deg, #1c2833, #2e3e50);
+    margin: 15px auto;
+    width: 80%;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 20px;
+    font-size: 1.4em;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.alarm:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+}
+
+/* Pulsing glow for active alarms */
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 10px rgba(46,125,50,0.5); }
+    50% { box-shadow: 0 0 20px rgba(46,125,50,0.8); }
+    100% { box-shadow: 0 0 10px rgba(46,125,50,0.5); }
+}
+.alarm.active {
+    animation: pulse-glow 1.5s infinite;
+}
+
+/* Alarm Buttons */
+a.button {
+    display: block;
+    width: 70%;
+    max-width: 400px;
+    margin: 12px auto;
+    color: #ffffff;
+    font-size: 1.4em;
+    padding: 15px 0;
+    border-radius: 15px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Status Buttons */
+a.on {
+    background-color: #6c757d; /* Green for active */
+}
+a.off {
+    background-color: #2e7d32; /* Gray for inactive */
+}
+
+/* Edit & Delete Buttons */
+a.edit {
+    background-color: #1976d2; /* Blue */
+}
+a.delete {
+    background-color: #c62828; /* Red */
+}
+
+/* Add Alarm Button */
+a.normal {
+    background-color: #283593; /* Darker blue */
+}
+
+/* Hover Effects */
+a.button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+}
+
+/* Back Button */
+a.back {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    max-width: 400px;
+    font-size: 1.6em;
+    background-color: #fdd835;
+    color: #000;
+    border-radius: 20px;
+    padding: 15px 0;
+    text-decoration: none;
+    font-weight: 600;
+}
+a.back:hover {
+    background-color: #fbc02d;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🔔 Alarms</h1>
+{alarms}
+<a href="/add-alarm" class="button normal">➕ Add Alarm</a>
+<a href="/" class="back">⬅ Back</a>
+
+</body>
+</html>

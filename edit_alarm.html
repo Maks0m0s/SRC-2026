@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Alarm</title>
+
+<style>
+body {
+    font-family: Roboto, sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43);
+    color: #ffffff;
+    margin: 0;
+    padding: 30px 20px 120px;
+    display: flex;
+    justify-content: center;
+}
+
+.page {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.4em;
+    margin: 15px 0 30px;
+}
+
+.clock-icon {
+    font-size: 3.2em;
+    color: #FFD700;
+    margin-bottom: 20px;
+}
+
+.form-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(12px);
+    border-radius: 22px;
+    padding: 35px 25px 40px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.45);
+}
+
+input, select {
+    width: 100%;
+    font-size: 1.2em;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    margin-bottom: 18px;
+}
+
+.time-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.time-row input {
+    width: 100px;
+    text-align: center;
+    font-size: 1.4em;
+}
+
+.time-separator {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+button {
+    width: 100%;
+    font-size: 1.5em;
+    padding: 16px;
+    border-radius: 18px;
+    border: none;
+    cursor: pointer;
+    background: #283593;
+    color: #fff;
+}
+
+a.back {
+    position: fixed;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 40px);
+    max-width: 420px;
+    text-align: center;
+    font-size: 1.5em;
+    background: #ffeb3b;
+    color: #000;
+    border-radius: 20px;
+    padding: 14px 0;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="page">
+    <div class="clock-icon">⏰</div>
+    <h1>Edit Alarm</h1>
+
+    <div class="form-card">
+        <!-- GET is REQUIRED to match your API -->
+        <form action="/update-alarm" method="GET">
+
+            <!-- REQUIRED -->
+            <input type="hidden" name="id" value="{id}">
+
+            <input
+                type="text"
+                style="width: 250px;"
+                name="name"
+                placeholder="Alarm name"
+                value="{name}"
+                required
+            >
+
+            <div class="time-row">
+                <input type="number" name="h" min="0" max="23" value="{h}" required>
+                <span class="time-separator">:</span>
+                <input type="number" name="m" min="0" max="59" value="{m}" required>
+            </div>
+
+            <!-- repeat SAFE -->
+            <select name="repeat">
+                <option value="once" {repeat_once}>Once</option>
+                <option value="daily" {repeat_daily}>Daily</option>
+            </select>
+
+            <button type="submit">Update Alarm</button>
+        </form>
+    </div>
+</div>
+
+<a href="/alarms" class="back">⬅ Back</a>
+
+</body>
+</html>

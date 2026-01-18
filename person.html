@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Person Data</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #0b1320;
+    color: #eaeaf0;
+    padding: 40px 16px 140px;
+}
+.profile {
+    max-width: 420px;
+    margin: auto;
+    background: #111a2e;
+    border-radius: 18px;
+    padding: 28px 22px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+.avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    margin: 0 auto 20px;
+}
+.info {
+    margin-top: 18px;
+}
+.info span {
+    display: block;
+    font-size: 0.9em;
+    opacity: 0.7;
+}
+.info strong {
+    display: block;
+    font-size: 1.4em;
+    margin-top: 4px;
+    word-break: break-word;
+}
+.actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 12px;
+}
+.actions a {
+    flex: 1;
+    text-align: center;
+    padding: 14px 0;
+    border-radius: 14px;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+.actions a.edit {
+    background: #1e88e5;
+    color: white;
+}
+.actions a.delete {
+    background: #c62828;
+    color: white;
+}
+a.back {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    font-size: 1.8em;
+    background-color: #ffeb3b;
+    color: #000000;
+    border-radius: 20px;
+    padding: 18px 0;
+    text-decoration: none;
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="profile">
+    <div class="avatar">👤</div>
+
+    <div class="info">
+        <span>First name</span>
+        <strong>{name}</strong>
+    </div>
+
+    <div class="info">
+        <span>Surname</span>
+        <strong>{surname}</strong>
+    </div>
+
+    <div class="info">
+        <span>Birthday</span>
+        <strong>{birthday}</strong>
+    </div>
+
+    <div class="info">
+        <span>Age</span>
+        <strong>{age}</strong>
+    </div>
+
+    <div class="info">
+        <span>Email</span>
+        <strong>{email}</strong>
+    </div>
+
+    <div class="actions">
+        <a href="/edit-person/{id}" class="edit">✏️ Edit</a>
+        <a href="/delete-person/{id}" class="delete">🗑 Delete</a>
+    </div>
+</div>
+
+<a href="/family" class="back">⬅ Back</a>
+
+</body>
+</html>

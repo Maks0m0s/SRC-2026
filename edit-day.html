@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Important Day</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #0f2027, #203a43);
+    color: white;
+    padding-top: 60px;
+    padding-bottom: 120px;
+}
+h2 {
+    font-size: 3em;
+    margin-bottom: 40px;
+}
+form {
+    background-color: #001f4d;
+    width: 80%;
+    max-width: 400px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    text-align: left;
+}
+input, label {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+input[type="text"], input[type="color"] {
+    width: 90%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+}
+input[type="color"] {
+    width: 50px;
+    padding: 0;
+    cursor: pointer;
+}
+button {
+    width: 100%;
+    font-size: 1.8em;
+    padding: 15px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    margin-top: 15px;
+}
+label {
+    display: block;
+    margin-top: 10px;
+}
+a.back {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 400px;
+    font-size: 1.8em;
+    background-color: #ffeb3b;
+    color: #000;
+    border-radius: 20px;
+    padding: 18px 0;
+    text-decoration: none;
+}
+#colorPicker {
+    width: 100%;
+    margin-bottom: 25px;
+}
+</style>
+</head>
+<body>
+<h2>✏️ Edit Day</h2>
+<form action="/update-day" method="POST">
+    <input type="hidden" name="id" value="{id}">
+    <input type="text" name="name" value="{name}" required>
+    <input type="text" name="date" value="{date}" required>
+    <input type="color" name="color" id="colorPicker" value="{color}">
+    <button type="submit">💾 Save</button>
+</form>
+<a href="/important-days" class="back">⬅ Back</a>
+</body>
+</html>
