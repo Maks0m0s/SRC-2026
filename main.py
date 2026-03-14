@@ -1,5 +1,7 @@
 import utime
+import time
 import network
+import ntptime
 import uasyncio as asyncio
 from machine import Pin, PWM
 from tm1637 import TM1637
@@ -10,6 +12,9 @@ utime.sleep(2)
 
 MY_SSID = "SRC-2026"
 MY_PASSWORD = "123456789"
+
+wifi_ssid = "Roberto-5G"
+wifi_password = "esferitadegauss1985"
 
 ap = network.WLAN(network.AP_IF)
 
@@ -27,6 +32,69 @@ def start_ap():
         print("✅ AP running:", ap.ifconfig())
     except Exception as e:
         print("⚠️ AP ifconfig error:", e)
+
+def sync_madrid_time():
+    global base_epoch, base_ticks, current_date, time_configured
+
+    print("⏳ Syncing Madrid time...")
+
+    # disable AP
+    ap.active(False)
+    utime.sleep_ms(300)
+
+    wifi = network.WLAN(network.STA_IF)
+    wifi.active(True)
+    wifi.connect(wifi_ssid, wifi_password)
+
+    # wait connection
+    timeout = 0
+    while not wifi.isconnected():
+        utime.sleep(1)
+        timeout += 1
+        if timeout > 15:
+            print("❌ WiFi timeout")
+            wifi.active(False)
+            start_ap()
+            return
+
+    print("✅ WiFi connected")
+
+    try:
+        ntptime.settime()
+
+        # Madrid UTC+1 (simple version)
+        utc_offset = 3600
+        now = time.time() + utc_offset
+
+        tm = time.localtime(now)
+
+        y, mo, d, h, m, s, _, _ = tm
+
+        base_epoch = utime.mktime((y, mo, d, h, m, s, 0, 0))
+        base_ticks = utime.ticks_ms()
+
+        current_date = f"{y:04d}-{mo:02d}-{d:02d}"
+        time_configured = True
+
+        print("✅ Time synced:", h, m)
+
+    except Exception as e:
+        print("❌ NTP error:", e)
+
+    wifi.active(False)
+    gc.collect()
+
+    # re-enable AP
+    start_ap()
+
+async def ntp_sync_loop():
+
+    while True:
+        sync_madrid_time()
+
+        # wait 10 minutes
+        for _ in range(600):
+            await asyncio.sleep(1)
 
 def refresh_time():
     global time_configured, current_h, current_m, current_date
@@ -1185,6 +1253,8 @@ async def main():
 
     asyncio.create_task(display_switch())
     await asyncio.sleep(0.5)
+
+    asyncio.create_task(ntp_sync_loop())
 
     await asyncio.start_server(handle_client, "0.0.0.0", 80)
     print("🌍 Server running on port 80")
