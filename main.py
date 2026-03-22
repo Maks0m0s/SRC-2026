@@ -135,6 +135,18 @@ def save_data():
             ],
         }
 
+        if routine is not None:
+            data["routine"] = {
+                "on_time": {
+                    "h":routine.on_time.h,
+                    "m":routine.on_time.m
+                },
+                "off_time": {
+                    "h": routine.off_time.h,
+                    "m": routine.off_time.m
+                }
+            }
+
         with open(DATA_FILE + ".tmp", "w") as f:
             json.dump(data, f)
 
@@ -177,6 +189,17 @@ def load_data():
         day.uid = d["uid"]
         daysBase.days.append(day)
         ImportantDay._next_id = max(ImportantDay._next_id, day.uid + 1)
+
+    # ===== ROUTINE =====
+    global routine
+
+    r = raw.get("routine", None)
+    if r is not None:
+        on_time = Time(r['on_time']['h'], r['on_time']['m'])
+        off_time = Time(r['off_time']['h'], r['off_time']['m'])
+        routine = Routine(on_time, off_time)
+    else:
+        routine = r
 
     print("✅ Data loaded")
 
@@ -362,7 +385,7 @@ def escape_html(text):
     text = text.replace("'", "&#39;")
     return text
 
-# ===== TIME API =====
+# ===== DAYS MANAGEMENT =====
 
 class DaysBase:
     # Max days per month (index 1 = January, 12 = December)
@@ -450,6 +473,53 @@ class ImportantDay:
         return str(self.uid)
 
 daysBase = DaysBase()
+
+# ===== ROUTINE INTEGRATION =====
+
+class Routine:
+    def __init__(self, on_time, off_time):
+        self.on_time = on_time
+        self.off_time = off_time
+
+    def get_on_time(self):
+        return f"{self.on_time.h} : {self.on_time.m}"
+
+    def get_off_time(self):
+        return f"{self.off_time.h} : {self.off_time.m}"
+
+class Time:
+    def __init__(self, h, m):
+        self.h = h
+        self.m = m
+
+routine = None
+
+routine_triggered_on = False
+routine_triggered_off = False
+
+async def check_routine():
+    global display_on, routine, routine_triggered_on, routine_triggered_off
+
+    while True:
+        if routine is not None and time_configured:
+            # ON trigger
+            if (current_h, current_m) == (routine.on_time.h, routine.on_time.m):
+                if not routine_triggered_on:
+                    display_on = True
+                    display_power(display_on)
+                    routine_triggered_on = True
+                    routine_triggered_off = False  # reset off for next cycle
+
+            # OFF trigger
+            elif (current_h, current_m) == (routine.off_time.h, routine.off_time.m):
+                if not routine_triggered_off:
+                    display_on = False
+                    display_power(display_on)
+                    routine_triggered_off = True
+                    routine_triggered_on = False  # reset on for next cycle
+
+        await asyncio.sleep(1)  # check every second
+# ===== TIME API =====
 
 def days_until(event_date):
     today = current_date
@@ -585,6 +655,28 @@ async def read_exact(reader, size):
             break
         data += chunk
     return data
+
+def render_display(message=""):
+    global routine
+    html = get_html('display')
+
+    if routine:
+        on_h = routine.on_time.h
+        on_m = routine.on_time.m
+        off_h = routine.off_time.h
+        off_m = routine.off_time.m
+    else:
+        on_h = on_m = off_h = off_m = 0
+
+    return (
+        html
+        .replace('{brightness}', str(brightness) if display_on else 'OFF')
+        .replace('{message}', message)
+        .replace('{on_h}', str(on_h))
+        .replace('{on_m}', str(on_m))
+        .replace('{off_h}', str(off_h))
+        .replace('{off_m}', str(off_m))
+    )
 
 # ===== HTTP SERVER =====
 async def handle_client(reader, writer):
@@ -1085,40 +1177,38 @@ setTimeout(() => {
 
         # ===== DISPLAY =====
         elif path == '/display':
-            html = get_html('display')
-            response_body = (
-                html.replace('{brightness}', str(brightness) if display_on else 'OFF')
-                .replace('{message}', '')
-            )
+            response_body = render_display()
+
         elif path == '/display/on':
             display_power(True)
             display_brightness(brightness)
-            html = get_html('display')
-            response_body = (
-                html.replace('{brightness}', str(brightness))
-                .replace('{message}', '')
-            )
+            response_body = render_display()
+
         elif path == '/display/off':
             display_power(False)
-            html = get_html('display')
-            response_body = (
-                html.replace('{brightness}', 'OFF')
-                .replace('{message}', '')
-            )
+            response_body = render_display()
+
         elif path == '/display/plus':
-            result = display_brightness(brightness + 1)
-            html = get_html('display')
-            response_body = (
-                html.replace('{brightness}', str(brightness) if display_on else 'OFF')
-                .replace('{message}', result or '')
-            )
+            display_brightness(brightness + 1)
+            response_body = render_display()
+
         elif path == '/display/minus':
-            result = display_brightness(brightness - 1)
-            html = get_html('display')
-            response_body = (
-                html.replace('{brightness}', str(brightness) if display_on else 'OFF')
-                .replace('{message}', result or '')
-            )
+            display_brightness(brightness - 1)
+            response_body = render_display()
+
+        elif path == "/set-routine" and method == "POST":
+            params = parse_form(body)
+
+            on_h = int(params.get("on_h", 0))
+            on_m = int(params.get("on_m", 0))
+            off_h = int(params.get("off_h", 0))
+            off_m = int(params.get("off_m", 0))
+
+            global routine
+            routine = Routine(Time(on_h, on_m), Time(off_h, off_m))
+            save_data()
+
+            response_body = render_display("✅ Routine saved")
 
         body_bytes = response_body.encode("utf-8")
 
@@ -1255,6 +1345,8 @@ async def main():
     await asyncio.sleep(0.5)
 
     asyncio.create_task(ntp_sync_loop())
+
+    asyncio.create_task(check_routine())
 
     await asyncio.start_server(handle_client, "0.0.0.0", 80)
     print("🌍 Server running on port 80")
